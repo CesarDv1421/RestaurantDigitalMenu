@@ -1,0 +1,16 @@
+{
+  "name": "second-project",
+  "version": "1.0.0",
+  "description": "Practica de habilidades de desarrollo",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm install && concurrently \"cd backend && npm install && npx prisma migrate dev && npx prisma db seed && npm run dev \"cd vite-project && npm install && npm run dev\" ",
+    "server": "cd backend && nodemon index.js",
+    "client": "cd vite-project && npm run dev"
+  },
+  "author": "CesarDv1421",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.1"
+  }
+}

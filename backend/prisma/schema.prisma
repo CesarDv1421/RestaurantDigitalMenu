@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model categorias {
+  id        Int    @id @default(autoincrement())
+  categoria String @db.VarChar(50)
+  menu      menu[]
+}
+
+model menu {
+  id                                 Int                                  @id @default(autoincrement())
+  nombre                             String                               @db.VarChar(50)
+  descripcion                        String                               @db.VarChar(200)
+  precio                             Decimal?                             @db.Decimal(10, 2)
+  img                                String                               @default("coffee.jpg") @db.VarChar(50)
+  id_categoria                       Int
+  categorias                         categorias                           @relation(fields: [id_categoria], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "categoria")
+  platos_con_extras                  platos_con_extras[]
+  platos_con_ingredientes_opcionales platos_con_ingredientes_opcionales[]
+  variantes                          variantes[]
+
+  @@index([id_categoria], map: "categoria")
+}
+
+model tipos_de_variantes {
+  id        Int         @id @default(autoincrement())
+  variante  String      @db.VarChar(50)
+  variantes variantes[]
+}
+
+model variantes {
+  id                    Int                @id @default(autoincrement())
+  id_menu               Int
+  id_tipos_de_variantes Int
+  precio                Decimal            @default(0.00) @db.Decimal(10, 2)
+  menu                  menu               @relation(fields: [id_menu], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "menu")
+  tipos_de_variantes    tipos_de_variantes @relation(fields: [id_tipos_de_variantes], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tipos_de_variantes")
+
+  @@index([id_menu], map: "menu")
+  @@index([id_tipos_de_variantes], map: "tipos_de_variantes")
+}
+
+model extras {
+  id                Int                 @id @default(autoincrement())
+  extra             String              @db.VarChar(50)
+  platos_con_extras platos_con_extras[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ingredientes_opcionales {
+  id                                 Int                                  @id @default(autoincrement())
+  ingrediente                        String?                              @db.VarChar(50)
+  platos_con_ingredientes_opcionales platos_con_ingredientes_opcionales[]
+}
+
+model platos_con_extras {
+  id       Int      @id @default(autoincrement())
+  id_menu  Int?
+  id_extra Int?
+  price    Decimal? @db.Decimal(10, 2)
+  extras   extras?  @relation(fields: [id_extra], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_platos_con_extras_extras")
+  menu     menu?    @relation(fields: [id_menu], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_platos_con_extras_menu")
+
+  @@index([id_extra], map: "FK_platos_con_extras_extras")
+  @@index([id_menu], map: "FK_platos_con_extras_menu")
+}
+
+model platos_con_ingredientes_opcionales {
+  id                         Int                     @id @default(autoincrement())
+  id_menu                    Int
+  id_ingredientes_opcionales Int
+  ingredientes_opcionales    ingredientes_opcionales @relation(fields: [id_ingredientes_opcionales], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_platos_con_ingredientes_opcionales_ingredientes_opcionales")
+  menu                       menu                    @relation(fields: [id_menu], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_platos_con_ingredientes_opcionales_menu")
+
+  @@index([id_ingredientes_opcionales], map: "FK_platos_con_ingredientes_opcionales_ingredientes_opcionales")
+  @@index([id_menu], map: "FK_platos_con_ingredientes_opcionales_menu")
+}
+
+model clientes {
+  id       Int    @id @default(autoincrement())
+  nombre   String @db.VarChar(50)
+  email    String @db.VarChar(50)
+  password String @db.VarChar(50)
+  id_rol   Int    @default(1)
+  roles    roles  @relation(fields: [id_rol], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_clientes_roles")
+
+  @@index([id_rol], map: "FK_clientes_roles")
+}
+
+model roles {
+  id       Int        @id @default(autoincrement())
+  roles    String     @db.VarChar(50)
+  clientes clientes[]
+}

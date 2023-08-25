@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Outfit Medium';
+  src: url('./fonts/Outfit/static/Outfit-Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Outfit Light';
+  src: url('./fonts/Outfit/static/Outfit-Light.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Outfit Regular';
+  src: url('./fonts/Outfit/static/Outfit-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Outfit Bold';
+  src: url('./fonts/Outfit/static/Outfit-Bold.ttf') format('truetype');
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  box-sizing: border-box;
+  font-family: 'Outfit Medium';
+}

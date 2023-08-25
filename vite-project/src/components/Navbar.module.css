@@ -1,0 +1,26 @@
+.ulContainer {
+    border-right: solid 2px rgb(123, 31, 31);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 40px;
+    height: 100vh;
+    padding: 20px 20px;
+  }
+  
+  .ulContainer > li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .ulContainer > li:first-child {
+    margin-bottom: auto; /* Empujar el primer elemento (imagen) hacia la izquierda */
+  }
+  
+  .ulContainer > li:last-child {
+    font-size: 15px;
+    text-align: center;
+    margin-top: auto; /* Empujar el último elemento (Sign Out) hacia la derecha */
+  }
