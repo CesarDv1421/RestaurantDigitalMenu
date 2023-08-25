@@ -3,11 +3,32 @@ import { createContext, useState } from 'react';
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [userToken, setUserToken] = useState(localStorage.getItem('token') || null);
+    const token = localStorage.getItem('token');
+    let rawUserData = localStorage.getItem('userData');
 
-  const login = (newToken) => {
-    setUserToken(JSON.stringify(newToken));
-    localStorage.setItem('token', JSON.stringify(newToken));
+    if(rawUserData){
+        try {
+            rawUserData = JSON.parse(rawUserData);
+        } catch (error) {
+            console.log('Error parsing userData', error)
+            
+        }
+    }
+    
+  const [userToken, setUserToken] = useState(token);
+  const [userData, setUserData] = useState(rawUserData);
+
+  const login = ({token, userName, rol}) => {
+      const userData = {
+          userName: userName,
+          rol: rol
+      }
+      
+    setUserToken(token);
+    setUserData(userData);
+      
+    localStorage.setItem('token', token);
+    localStorage.setItem('userData', JSON.stringify(userData));
   };
 
   const logout = () => {
@@ -16,7 +37,7 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ userToken : JSON.parse(userToken), login, logout }}>
+    <AuthContext.Provider value={{ userToken, userData, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
