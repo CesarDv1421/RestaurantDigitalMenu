@@ -11,9 +11,12 @@ import { AuthContext } from '../context/AuthContext';
 
 function App() {
   const { userToken } = useContext(AuthContext);
+    
   return (
     <BrowserRouter>
+      
       <Routes>
+        <Route path='/' element={userToken ? <Auth /> : <Menu />} />
         <Route path='/auth' element={<Auth />} />
         <Route path='/menu' element={userToken ? <Menu /> : <Navigate to='/auth' />} />
         <Route path='/cart' element={userToken ? <Cart /> : <Navigate to='/auth' />} />
