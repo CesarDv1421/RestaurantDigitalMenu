@@ -2,8 +2,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const main = async () => {
-
-  console.log("asdasd")
+  console.log('asdasd');
   const categorias = [
     {
       id: 1,
@@ -449,6 +448,36 @@ const main = async () => {
     },
   ];
 
+  for (const categoryData of categorias) {
+    await prisma.categorias.upsert({
+      where: { id: categoryData.id },
+      update: {},
+      create: {
+        categoria: categoryData.categoria,
+      },
+    });
+  }
+
+  for (const rolesData of roles) {
+    await prisma.roles.upsert({
+      where: { id: rolesData.id },
+      update: {},
+      create: {
+        roles: rolesData.roles,
+      },
+    });
+  }
+
+  for (const extrasData of extras) {
+    await prisma.extras.upsert({
+      where: { id: extrasData.id },
+      update: {},
+      create: {
+        extra: extrasData.extra,
+      },
+    });
+  }
+
   for (const menuData of menu) {
     const categoria = await prisma.categorias.findFirst({
       where: { categoria: menuData.categoria.connect.categoria },
@@ -471,32 +500,22 @@ const main = async () => {
     });
   }
 
-  for (const extrasData of extras) {
-    await prisma.extras.upsert({
-      where: { id: extrasData.id },
-      update: {},
-      create: {
-        extra: extrasData.extra,
-      },
-    });
-  }
-
-  for (const categoryData of categorias) {
-    await prisma.categorias.upsert({
-      where: { id: categoryData.id },
-      update: {},
-      create: {
-        categoria: categoryData.categoria,
-      },
-    });
-  }
-
   for (const ingredientOptionalsData of ingredientes_opcionales) {
     await prisma.ingredientes_opcionales.upsert({
       where: { id: ingredientOptionalsData.id },
       update: {},
       create: {
         ingrediente: ingredientOptionalsData.ingrediente,
+      },
+    });
+  }
+
+  for (const typesOfVariantsData of tipos_de_variantes) {
+    await prisma.tipos_de_variantes.upsert({
+      where: { id: typesOfVariantsData.id },
+      update: {},
+      create: {
+        variante: typesOfVariantsData.variante,
       },
     });
   }
@@ -521,22 +540,22 @@ const main = async () => {
     });
   }
 
-  for (const rolesData of roles) {
-    await prisma.roles.upsert({
-      where: { id: rolesData.id },
-      update: {},
-      create: {
-        roles: rolesData.roles,
-      },
+  for (const platesWithIngredientsData of platos_con_variantes) {
+    const idMenu = await prisma.menu.findFirst({
+      where: { nombre: platesWithIngredientsData.id_menu.connect.nombre },
     });
-  }
 
-  for (const typesOfVariantsData of tipos_de_variantes) {
-    await prisma.tipos_de_variantes.upsert({
-      where: { id: typesOfVariantsData.id },
+    const idIngredientOptional = await prisma.tipos_de_variantes.findFirst({
+      where: { variante: platesWithIngredientsData.id_tipos_de_variantes.connect.variante },
+    });
+
+    await prisma.variantes.upsert({
+      where: { id: platesWithIngredientsData.id },
       update: {},
       create: {
-        variante: typesOfVariantsData.variante,
+        menu: { connect: { id: idMenu.id } },
+        tipos_de_variantes: { connect: { id: idIngredientOptional.id } },
+        precio: platesWithIngredientsData.precio,
       },
     });
   }
@@ -556,26 +575,6 @@ const main = async () => {
       create: {
         menu: { connect: { id: idMenu.id } },
         ingredientes_opcionales: { connect: { id: idIngredientOptional.id } },
-        price: idIngredientOptional.price,
-      },
-    });
-  }
-
-  for (const platesWithIngredientsData of platos_con_variantes) {
-    const idMenu = await prisma.menu.findFirst({
-      where: { nombre: platesWithIngredientsData.id_menu.connect.nombre },
-    });
-
-    const idIngredientOptional = await prisma.tipos_de_variantes.findFirst({
-      where: { variante: platesWithIngredientsData.id_tipos_de_variantes.connect.variante },
-    });
-
-    await prisma.variantes.upsert({
-      where: { id: platesWithIngredientsData.id },
-      update: {},
-      create: {
-        menu: { connect: { id: idMenu.id } },
-        tipos_de_variantes: { connect: { id: idIngredientOptional.id } },
         price: idIngredientOptional.price,
       },
     });
