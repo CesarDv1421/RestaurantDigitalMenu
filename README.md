@@ -19,8 +19,13 @@ Practica de habilidades de desarrollo usando en el :
 
 ## Development
 
-- Cambie el nombre del archivo .env.example por .env ubicado en la carpeta Backend
-- Cambie la variable VITE_API_URL del archivo (.env) ubicado en la carpeta vite-project por: http://localhost:3000
-- Dirijase a /vite-project y ejecute npm install para instalar dependencias y "npm run dev" para levantar el localhost:3000
+## Frontend
+- Cambie el nombre del archivo .env.example por .env ubicado en la ruta raiz de la carpeta vite-project
+- Ejecute npm install para instalar dependencias y "npm run dev" para levantar el localhost:3000
+
+## Backend
+- Cambie el nombre del archivo .env.example por .env ubicado en la carpeta backend
 - Dirijase a /backend y ejecute npm install para instalar dependencias
-- Dirijase a /backend para instalar la base de datos de prueba, ejecute "npx prisma db seed", luego ejecuta "npm run dev" para levantar el servidor
+- Ejecute el comando "npx migrate dev" para migrar toda las tablas a su base de datos
+- Ejecute "npx prisma db seed" para tener informacion de prueba en la base de datos
+- ejecute el comando "npm run dev" para levantar el servidor del backend.
