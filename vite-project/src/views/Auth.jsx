@@ -73,7 +73,7 @@ const Auth = () => {
         return console.log(err);
       }
       if (response.status === 201) {
-        login({ token, userName, rol });
+        login(token, { userName, rol });
         navigate('/menu');
       }
     } catch (err) {
@@ -108,7 +108,7 @@ const Auth = () => {
         return console.log(err);
       }
       if (response.status === 201) {
-        login({ token, userName, rol });
+        login(token, { userName, rol });
         navigate('/menu');
       }
     } catch (err) {

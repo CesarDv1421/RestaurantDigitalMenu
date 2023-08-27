@@ -46,7 +46,7 @@ function App() {
   const { isOpen, onOpen, onClose } = useDisclosure(); //custom Hook del Modal del NextUI
 
   //Context del Token
-  const { logout, userToken } = useContext(AuthContext);
+  const { logout, userToken, userInfo } = useContext(AuthContext);
 
   useEffect(() => {
     if (!userToken) return navigate('/auth');
@@ -58,7 +58,7 @@ function App() {
         const response = await fetch(`${API_URL}/menu`, {
           headers: {
             'Content-Type': 'application/json',
-            authorization: `Bearer ${userToken.token}`,
+            authorization: `Bearer ${userToken}`,
           },
         });
         const { menu, categories, err } = await response.json();
@@ -111,7 +111,7 @@ function App() {
       <main className='w-screen h-screen overflow-y-hidden bg-gray-100'>
         <section className='border-2 border-b-red-900'>
           <div className={css.ChosseCategoryContainer}>
-            <h1>Bienvenido, {userToken.userName}</h1>
+            <h1>Bienvenido, {userInfo.userName}</h1>
 
             <div className='w-1/2'>
               {/* <input type='text' placeholder='Buscar categoria o menu' /> */}
