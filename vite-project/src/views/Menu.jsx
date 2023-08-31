@@ -99,14 +99,15 @@ function App() {
     navigate('/cart');
   };
 
-  const onFindingMenu = () => {
+  const onFindingMenu = (event) => {
     //Muestra el menu de acuerdo a lo escrito
-    console.log(inputValue);
+    const value = event.target.value;
+
     const filteredFood = copyOfRestaurantMenu.current.filter((food) =>
       food.name.toLowerCase().includes(inputValue.toLocaleLowerCase())
     );
     console.log(filteredFood);
-    return setRestaurantMenu(filteredFood);
+    setRestaurantMenu(filteredFood);
   };
 
   return (
