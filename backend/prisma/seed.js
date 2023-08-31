@@ -2,8 +2,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const main = async () => {
-
-  console.log("asdasd")
+  console.log('asdasd');
   const categorias = [
     {
       id: 1,
@@ -449,6 +448,16 @@ const main = async () => {
     },
   ];
 
+  for (const categoryData of categorias) {
+    await prisma.categorias.upsert({
+      where: { id: categoryData.id },
+      update: {},
+      create: {
+        categoria: categoryData.categoria,
+      },
+    });
+  }
+
   for (const menuData of menu) {
     const categoria = await prisma.categorias.findFirst({
       where: { categoria: menuData.categoria.connect.categoria },
@@ -477,16 +486,6 @@ const main = async () => {
       update: {},
       create: {
         extra: extrasData.extra,
-      },
-    });
-  }
-
-  for (const categoryData of categorias) {
-    await prisma.categorias.upsert({
-      where: { id: categoryData.id },
-      update: {},
-      create: {
-        categoria: categoryData.categoria,
       },
     });
   }
