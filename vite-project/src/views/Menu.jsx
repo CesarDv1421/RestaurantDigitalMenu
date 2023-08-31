@@ -136,7 +136,14 @@ function App() {
               isInvisible={cartOrders.length === 0}
               color='danger'
             >
-              <img src={Cart} alt='Cart logo' onClick={() => onOpen()} width='35px' height='35px' />
+              <img
+                src={Cart}
+                alt='Cart logo'
+                onClick={() => onOpen()}
+                width='35px'
+                height='35px'
+                style={{ cursor: 'pointer' }}
+              />
             </Badge>
 
             <Modal
