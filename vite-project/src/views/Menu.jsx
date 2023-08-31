@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 //Componentes
@@ -32,7 +32,7 @@ import css from '../components/Menu.module.css';
 
 function App() {
   const [restaurantMenu, setRestaurantMenu] = useState([]); //Aqui se almacena el menu del restaurante
-  const [copyOfRestaurantMenu, setCopyOfRestaurantMenu] = useState(); //Copia del menu para funcionalidades
+  const copyOfRestaurantMenu = useRef([]);
 
   const { cartOrders, setCartOrders } = useContext(CartOrdersContext);
 
@@ -73,7 +73,7 @@ function App() {
 
         if (response.status === 200) {
           setRestaurantMenu(menu);
-          setCopyOfRestaurantMenu(menu);
+          copyOfRestaurantMenu.current = menu;
           setCategories(categories);
         }
       } catch (err) {
@@ -89,10 +89,10 @@ function App() {
   useEffect(() => {
     setRestaurantMenu(() => {
       return displayedCategory !== 'Menu' //Cuando se seleccione cualquier boton que no sea "Menu" de las categorias
-        ? copyOfRestaurantMenu.filter(({ category }) => category === displayedCategory)
-        : copyOfRestaurantMenu;
+        ? copyOfRestaurantMenu.current.filter(({ category }) => category === displayedCategory)
+        : copyOfRestaurantMenu.current;
     });
-  }, [displayedCategory]); //Cada vez que se seleccione una categoria
+  }, [displayedCategory, copyOfRestaurantMenu]); //Cada vez que se seleccione una categoria
 
   const onGoToCart = () => {
     localStorage.setItem('cartOrders', JSON.stringify(cartOrders));
@@ -102,7 +102,7 @@ function App() {
   const onFindingMenu = () => {
     //Muestra el menu de acuerdo a lo escrito
     console.log(inputValue);
-    const filteredFood = copyOfRestaurantMenu.filter((food) =>
+    const filteredFood = copyOfRestaurantMenu.current.filter((food) =>
       food.name.toLowerCase().includes(inputValue.toLocaleLowerCase())
     );
     console.log(filteredFood);
@@ -113,7 +113,7 @@ function App() {
     <div className='flex'>
       <Navbar />
 
-      <main className='w-screen h-screen overflow-y-hidden bg-gray-100'>
+      <main className='w-screen h-full overflow-y-hidden bg-gray-100'>
         <section className='border-2 border-b-red-900'>
           <div className={css.ChosseCategoryContainer}>
             <h1>Bienvenido, {userToken.userName}</h1>
@@ -229,7 +229,7 @@ function App() {
           </div>
         </section>
 
-        <section className='overflow-y-auto h-screen'>
+        <section className='overflow-y-auto h-full'>
           <SliderCategories categories={categories} setDisplayedCategory={setDisplayedCategory} />
           <h1 className='m-5 text-2xl'>{displayedCategory === 'Menu' ? 'Menu' : `${displayedCategory} Menu`}</h1>
           <div className='p-5'>
