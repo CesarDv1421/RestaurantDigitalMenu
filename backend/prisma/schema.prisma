@@ -86,7 +86,7 @@ model clientes {
   id       Int    @id @default(autoincrement())
   nombre   String @db.VarChar(50)
   email    String @db.VarChar(50)
-  password String @db.VarChar(50)
+  password String @db.VarChar(255)
   id_rol   Int    @default(1)
   roles    roles  @relation(fields: [id_rol], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_clientes_roles")
 
