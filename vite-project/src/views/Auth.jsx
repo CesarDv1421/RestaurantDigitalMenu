@@ -32,14 +32,10 @@ const Auth = () => {
   const { login, logout, userToken } = useContext(AuthContext);
 
   useEffect(() => {
-    if (userToken) return navigate('/menu');
+    if (userToken) {
+      navigate('/menu');
+    }
   }, [userToken]);
-
-  useEffect(() => {
-    setName('');
-    setEmail('');
-    setPassword('');
-  }, [typeOfAuth]);
 
   const toggleVisibility = () => setIsPasswordVisible(!isPasswordVisible);
 
@@ -74,7 +70,7 @@ const Auth = () => {
       }
       if (response.status === 201) {
         login({ token, userName, rol });
-        navigate('/menu');
+        // navigate('/menu');
       }
     } catch (err) {
       setErrMessage({ type: 'Server', styles: 'invalid', message: err });
@@ -100,7 +96,7 @@ const Auth = () => {
 
       const { token, userName, rol, err } = await response.json();
 
-      console.log(token, userName, rol, err);
+      console.log({ token, userName, rol, err });
 
       if (err) {
         logout();
@@ -109,7 +105,7 @@ const Auth = () => {
       }
       if (response.status === 201) {
         login({ token, userName, rol });
-        navigate('/menu');
+        // navigate('/menu');
       }
     } catch (err) {
       setErrMessage({ type: 'Server', styles: 'invalid', message: err });

@@ -49,7 +49,9 @@ function App() {
   const { logout, userToken } = useContext(AuthContext);
 
   useEffect(() => {
-    if (!userToken) return navigate('/auth');
+    if (!userToken) {
+      navigate('/auth');
+    }
   }, [userToken]);
 
   useEffect(() => {
@@ -58,7 +60,7 @@ function App() {
         const response = await fetch(`${API_URL}/menu`, {
           headers: {
             'Content-Type': 'application/json',
-            authorization: `Bearer ${userToken.token}`,
+            authorization: `Bearer ${userToken}`,
           },
         });
         const { menu, categories, err } = await response.json();
@@ -78,8 +80,11 @@ function App() {
         console.log(err);
       }
     };
-    fetchMenuRestaurant();
-  }, []);
+
+    if (userToken) {
+      fetchMenuRestaurant();
+    }
+  }, [userToken]);
 
   useEffect(() => {
     setRestaurantMenu(() => {
